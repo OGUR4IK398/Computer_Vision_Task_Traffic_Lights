@@ -41,14 +41,13 @@ def standardize_input(image):
     ## TODO: Если вы хотите преобразовать изображение в формат, одинаковый для всех изображений, сделайте это здесь.
     # Преобразуем к общему размеру и переводим кодировку в HSV
     # Получаем значения высоты и ширины картинки
+
+
+    standard_im = cv2.resize(standard_im, (60, 120))
     height, width = standard_im.shape[:2]
-    print(width, height)
 
-    standard_im = cv2.resize(standard_im, (int(height * 0.75), int(width * 0.8)))
+    standard_im = standard_im[int(0.09 * height):int(0.91 * height) + 3, int(0.32 * width):int(0.68 * width) + 3]
     standard_im = cv2.cvtColor(standard_im, cv2.COLOR_BGR2HSV)
-    # Фильтруем по яркости
-    # standard_im = standard_im_hsv[:, :, 2]
-
 
     return standard_im
 
@@ -67,11 +66,6 @@ def predict_label(rgb_image):
     image = standardize_input(rgb_image)
     image = image[:, :, 2]
 
-    # Общее изменение цвета даёт небольшой прирост (~1.5 %)
-    image = image.astype(np.float64)
-    image += 40
-    image = np.clip(image, 0, 255)
-    image = image.astype(np.uint8)
 
     height_step = int(image.shape[0] / 3)
 
